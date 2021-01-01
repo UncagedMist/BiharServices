@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffb067"
+    tools:context=".RationActivity">
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/aboveBanner"
+        android:layout_margin="2dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-5860770870597755/7010820239"/>
+
+    <ScrollView
+        android:layout_below="@id/aboveBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnFormA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/formA"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/button_bg"
+                android:textSize="20sp" />
+
+            <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnFormB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/formB"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/button_bg"
+                android:textSize="20sp" />
+
+            <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/checkAppStatus"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/button_bg"
+                android:textSize="20sp" />
+
+            <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnChkAllot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/checkRationAllot"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:background="@drawable/button_bg" />
+
+            <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnDealer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dealerChallan"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:background="@drawable/button_bg" />
+
+            <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/officialPage"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:background="@drawable/button_bg" />
+
+            <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnAadhharLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/rationAadhaarLink"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:background="@drawable/button_bg" />
+
+            <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnDownload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/rationCardDownload"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:background="@drawable/button_bg" />
+
+            <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/rationCardSearch"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:background="@drawable/button_bg" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/belowBanner"
+        android:layout_margin="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        android:layout_alignParentBottom="true"
+        ads:adUnitId="ca-app-pub-5860770870597755/8519536540"/>
+
+</RelativeLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">बिहार सेवा</string>
+
+    <string name="rationCard">राशन कार्ड</string>
+    <string name="voterCard">मतदाता पहचान पत्र</string>
+    <string name="aawaasList">पीएम आवास योजना सूची</string>
+
+    <string name="changeLang">भाषा का चयन करें</string>
+
+    <string name="formA">प्रपत्र क</string>
+    <string name="formB">प्रपत्र ख</string>
+    <string name="checkAppStatus">आवेदन की स्थिति</string>
+    <string name="checkRationAllot">राशन आवंटन की जाँच करें</string>
+    <string name="dealerChallan">डीलर का चालान</string>
+    <string name="officialPage">मुख पृष्ठ</string>
+    <string name="rationAadhaarLink">राशन आधार लिंक की स्थिति</string>
+    <string name="rationCardDownload">राशन कार्ड डाउनलोड</string>
+    <string name="rationCardSearch">राशन कार्ड खोजें</string>
+
+    <string name="applyOnline">ऑनलाइन आवेदन</string>
+    <string name="downloadVoter">मतदाता कार्ड डाउनलोड करें</string>
+    <string name="editVoter">मतदाता कार्ड संपादित करें</string>
+    <string name="searchVoter">मतदाता खोजें</string>
+    <string name="trackApp">आवेदन की स्थिति</string>
+    <string name="reprint">मतदाता कार्ड पुनर्मुद्रण</string>
+    <string name="voterOfficial">मतदाता कार्ड सेवाएँ</string>
+
+    <string name="beneficiaryList">लाभार्थी सूची</string>
+    <string name="awasList">नई अवास सूची</string>
+    <string name="searchBeneficiary">लाभार्थी खोजें</string>
+</resources>

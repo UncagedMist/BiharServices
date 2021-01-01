@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Bihar Services</string>
+
+    <string name="rationCard">Ration Card</string>
+    <string name="voterCard">Voter Identity</string>
+    <string name="aawaasList">PM Awas Yojna List</string>
+
+    <string name="changeLang">Change Language</string>
+
+    <string name="formA">प्रपत्र क</string>
+    <string name="formB">प्रपत्र ख</string>
+    <string name="checkAppStatus">Check Application Status</string>
+    <string name="checkRationAllot">Check Ration Allotment</string>
+    <string name="dealerChallan">Dealer Challan</string>
+    <string name="officialPage">Home page</string>
+    <string name="rationAadhaarLink">Ration Aadhaar Link Status</string>
+    <string name="rationCardDownload">Ration Card Download</string>
+    <string name="rationCardSearch">Ration Card Search</string>
+
+    <string name="applyOnline">Apply Online</string>
+    <string name="downloadVoter">Download Voter Card</string>
+    <string name="editVoter">Edit Voter Card</string>
+    <string name="searchVoter">Search Voter</string>
+    <string name="trackApp">Track Application</string>
+    <string name="reprint">Voter Card Reprint</string>
+    <string name="voterOfficial">Voter Card Services</string>
+
+    <string name="beneficiaryList">Beneficiary List</string>
+    <string name="awasList">New Awas List</string>
+    <string name="searchBeneficiary">Search Beneficiary</string>
+
+
+</resources>

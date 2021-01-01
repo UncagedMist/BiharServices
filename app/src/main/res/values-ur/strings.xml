@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">بہار خدمت</string>
+
+    <string name="rationCard">راشن کارڈ</string>
+    <string name="voterCard">ووٹر کی شناخت</string>
+    <string name="aawaasList">وزیر اعظم ہاؤسنگ سکیم کی فہرست</string>
+
+    <string name="changeLang">زبان منتخب کریں</string>
+
+    <string name="formA">فارم اے</string>
+    <string name="formB">فارم بی</string>
+    <string name="checkAppStatus">درخواست کی حیثیت</string>
+    <string name="checkRationAllot">راشن مختص چیک کریں</string>
+    <string name="dealerChallan">ڈیلر انوائس</string>
+    <string name="officialPage">فرنٹ پیج</string>
+    <string name="rationAadhaarLink">راشن آدھار لنک کی حیثیت</string>
+    <string name="rationCardDownload">راشن کارڈ ڈاؤن لوڈ</string>
+    <string name="rationCardSearch">راشن کارڈ تلاش کریں</string>
+
+    <string name="applyOnline">آن لائن درخواست</string>
+    <string name="downloadVoter">ووٹر کارڈ ڈاؤن لوڈ کریں</string>
+    <string name="editVoter">ووٹر کارڈ میں ترمیم کریں</string>
+    <string name="searchVoter">ووٹر کی تلاش</string>
+    <string name="trackApp">درخواست کی حیثیت</string>
+    <string name="reprint">ووٹر کارڈ کی دوبارہ اشاعت</string>
+    <string name="voterOfficial">ووٹر کارڈ کی خدمات</string>
+
+    <string name="beneficiaryList">فائدہ اٹھانے والوں کی فہرست</string>
+    <string name="awasList">رہائش گاہ کی نئی فہرست</string>
+    <string name="searchBeneficiary">فائدہ اٹھانے والا تلاش کریں</string>
+</resources>
