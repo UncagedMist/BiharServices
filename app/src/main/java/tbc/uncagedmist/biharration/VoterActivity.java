@@ -15,18 +15,24 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
 import java.util.Locale;
 
 import am.appwise.components.ni.NoInternetDialog;
 import tbc.uncagedmist.biharration.Common.Common;
 
-public class VoterActivity extends AppCompatActivity {
+public class VoterActivity extends AppCompatActivity implements RewardedVideoAdListener {
 
     AdView aboveBanner, bottomBanner;
     NoInternetDialog noInternetDialog;
 
     Button btnApply, btnDownload, btnEdit, btnSearch,btnTrack, btnReprint, btnServices;
+
+    private RewardedVideoAd mRewardedVideoAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,9 @@ public class VoterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_voter);
 
         noInternetDialog = new NoInternetDialog.Builder(VoterActivity.this).build();
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(this);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getResources().getString(R.string.app_name));
@@ -133,6 +142,12 @@ public class VoterActivity extends AppCompatActivity {
         });
     }
 
+    private void loadRewardedVideoAd() {
+        mRewardedVideoAd.loadAd("ca-app-pub-5860770870597755/9362447560",
+                new AdRequest.Builder().build());
+    }
+
+
     private void adMethod() {
         aboveBanner.setAdListener(new AdListener() {
             @Override
@@ -186,6 +201,7 @@ public class VoterActivity extends AppCompatActivity {
             }
 
             @Override
+
             public void onAdClicked() {
                 // Code to be executed when the user clicks on an ad.
             }
@@ -208,6 +224,44 @@ public class VoterActivity extends AppCompatActivity {
         String language = prefs.getString("My_Lang","");
         setLocale(language);
     }
+    @Override
+    public void onRewarded(RewardItem reward) {
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+        loadRewardedVideoAd();
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int errorCode) {
+        if (mRewardedVideoAd.isLoaded()) {
+            mRewardedVideoAd.show();
+        }
+    }
+
+    @Override
+    public void onRewardedVideoAdLoaded() {
+        if (mRewardedVideoAd.isLoaded()) {
+            mRewardedVideoAd .show();
+        }
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+    }
+
+    @Override
+    public void onRewardedVideoCompleted() {
+    }
 
     private void setLocale(String lang) {
         Locale locale = new Locale(lang);
@@ -223,7 +277,20 @@ public class VoterActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onResume() {
+        mRewardedVideoAd.resume(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mRewardedVideoAd.pause(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mRewardedVideoAd.destroy(this);
         super.onDestroy();
         noInternetDialog.onDestroy();
     }
