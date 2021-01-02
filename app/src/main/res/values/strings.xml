@@ -7,8 +7,8 @@
 
     <string name="changeLang">Change Language</string>
 
-    <string name="formA">प्रपत्र क</string>
-    <string name="formB">प्रपत्र ख</string>
+    <string name="formA">Form क</string>
+    <string name="formB">Form ख</string>
     <string name="checkAppStatus">Check Application Status</string>
     <string name="checkRationAllot">Check Ration Allotment</string>
     <string name="dealerChallan">Dealer Challan</string>
@@ -28,6 +28,5 @@
     <string name="beneficiaryList">Beneficiary List</string>
     <string name="awasList">New Awas List</string>
     <string name="searchBeneficiary">Search Beneficiary</string>
-
 
 </resources>

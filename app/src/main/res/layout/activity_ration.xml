@@ -18,6 +18,7 @@
         ads:adUnitId="ca-app-pub-5860770870597755/7010820239"/>
 
     <ScrollView
+        android:layout_above="@id/belowBanner"
         android:layout_below="@id/aboveBanner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
