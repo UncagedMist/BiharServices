@@ -10,8 +10,8 @@ android {
         applicationId "tbc.uncagedmist.biharration"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.0.5"
+        versionCode 6
+        versionName "1.0.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -61,6 +61,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'com.github.MonsterTechnoGits:WebViewAdblock:1.1'
+
+    implementation 'com.karumi:dexter:6.2.2'
 
     def lifecycle_version = "2.0.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"

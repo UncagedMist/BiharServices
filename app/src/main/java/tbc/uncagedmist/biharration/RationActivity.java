@@ -3,11 +3,14 @@ package tbc.uncagedmist.biharration;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +21,18 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.LoadAdError;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Locale;
 
 import am.appwise.components.ni.NoInternetDialog;
@@ -33,6 +47,8 @@ public class RationActivity extends AppCompatActivity {
     NoInternetDialog noInternetDialog;
 
     private InterstitialAd mInterstitialAd;
+
+    private final static int BUFFER_SIZE = 1024;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,14 +215,16 @@ public class RationActivity extends AppCompatActivity {
         btnFormA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(RationActivity.this, "Will be added in the next update!", Toast.LENGTH_SHORT).show();
+                askForPermission();
+                copyAsset("pra_k.pdf");
             }
         });
 
         btnFormB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(RationActivity.this, "Will be added in the next update!", Toast.LENGTH_SHORT).show();
+                askForPermission();
+                copyAsset("pra_kh.pdf");
             }
         });
 
@@ -279,6 +297,82 @@ public class RationActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void askForPermission() {
+        Dexter
+                .withContext(this)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                        Toast.makeText(RationActivity.this, "Permission Granted...", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                        Toast.makeText(RationActivity.this, "Permission Denied!! You Can't Download Files.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                        permissionToken.continuePermissionRequest();
+                    }
+                }).check();
+    }
+
+    private void copyAsset(String fileName) {
+        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BiharServices";
+        File dir = new File(dirPath);
+
+        if (!dir.exists())  {
+            dir.mkdirs();
+        }
+
+        AssetManager assetManager = getAssets();
+        InputStream in = null;
+        OutputStream out = null;
+
+        try {
+            in = assetManager.open(fileName);
+            File outFile = new File(dirPath, fileName);
+            out = new FileOutputStream(outFile);
+            copyFile(in, out);
+            Toast.makeText(this, "File Saved!! Now Check in BiharService Folder.", Toast.LENGTH_SHORT).show();
+        }
+        catch (IOException e)   {
+            e.printStackTrace();
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        finally {
+            if (in != null) {
+                try {
+                    in.close();
+                }
+                catch (IOException e)   {
+                    e.printStackTrace();
+                }
+            }
+
+            if (out != null) {
+                try {
+                    out.close();
+                }
+                catch (IOException e)   {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+
+        while((read = in.read(buffer)) != -1)   {
+            out.write(buffer, 0 ,read);
+        }
     }
 
     private void loadLocale()   {

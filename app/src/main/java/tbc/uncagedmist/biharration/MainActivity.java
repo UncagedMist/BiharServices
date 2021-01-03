@@ -10,10 +10,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.bestsoft32.tt_fancy_gif_dialog_lib.TTFancyGifDialog;
+import com.bestsoft32.tt_fancy_gif_dialog_lib.TTFancyGifDialogListener;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -21,17 +24,23 @@ import com.google.android.gms.ads.LoadAdError;
 
 import java.util.Locale;
 
+import am.appwise.components.ni.NoInternetDialog;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btnRation, btnVoter, btnLang,btnAwas;
 
     AdView bottomBanner;
 
+    NoInternetDialog noInternetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadLocale();
         setContentView(R.layout.activity_main);
+
+        noInternetDialog = new NoInternetDialog.Builder(MainActivity.this).build();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getResources().getString(R.string.app_name));
@@ -160,5 +169,35 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("Settings", Activity.MODE_PRIVATE);
         String language = prefs.getString("My_Lang","");
         setLocale(language);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new TTFancyGifDialog.Builder(MainActivity.this)
+                .setTitle("UncagedMist")
+                .setMessage("Support us by downloading our other apps!")
+                .setPositiveBtnText("Support")
+                .setPositiveBtnBackground("#22b573")
+                .setNegativeBtnText("Don't")
+                .setNegativeBtnBackground("#c1272d")
+                .setGifResource(R.drawable.thank)
+                .isCancellable(false)
+                .OnPositiveClicked(new TTFancyGifDialogListener() {
+                    @Override
+                    public void OnClick() {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pub:UncagedMist")));
+                    }
+                })
+                .OnNegativeClicked(new TTFancyGifDialogListener() {
+                    @Override
+                    public void OnClick() {
+                    }
+                }).build();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        noInternetDialog.onDestroy();
     }
 }
