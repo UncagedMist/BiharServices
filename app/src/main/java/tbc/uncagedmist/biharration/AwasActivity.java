@@ -63,8 +63,6 @@ public class AwasActivity extends AppCompatActivity {
         btnAwas = findViewById(R.id.btnAwas);
         btnSearch = findViewById(R.id.btnSearch);
 
-        loadInterstitial();
-
         AdRequest adRequest = new AdRequest.Builder().build();
 
         aboveBanner.loadAd(adRequest);
@@ -177,42 +175,46 @@ public class AwasActivity extends AppCompatActivity {
         });
     }
 
-    private void loadInterstitial() {
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            Log.d("TAG", "The interstitial wasn't loaded yet.");
-        }
-    }
-
     private void onClickImplementation() {
         btnBene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AwasActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.BENE_AWAS);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(AwasActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.BENE_AWAS);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnAwas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AwasActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.LIST_AWAS);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(AwasActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.LIST_AWAS);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AwasActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.SEARCH_AWAS);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(AwasActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.SEARCH_AWAS);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }

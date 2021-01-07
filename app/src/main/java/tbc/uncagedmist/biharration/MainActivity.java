@@ -20,6 +20,7 @@ import com.bestsoft32.tt_fancy_gif_dialog_lib.TTFancyGifDialogListener;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.LoadAdError;
 
 import java.util.Locale;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     NoInternetDialog noInternetDialog;
 
+    private InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         noInternetDialog = new NoInternetDialog.Builder(MainActivity.this).build();
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-5860770870597755/7010604637");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
+        });
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getResources().getString(R.string.app_name));
@@ -59,14 +75,24 @@ public class MainActivity extends AppCompatActivity {
         btnRation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,RationActivity.class));
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+                else {
+                    startActivity(new Intent(MainActivity.this,RationActivity.class));
+                }
             }
         });
 
         btnVoter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,VoterActivity.class));
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+                else {
+                    startActivity(new Intent(MainActivity.this,VoterActivity.class));
+                }
             }
         });
 
@@ -80,7 +106,12 @@ public class MainActivity extends AppCompatActivity {
         btnAwas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,AwasActivity.class));
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+                else {
+                    startActivity(new Intent(MainActivity.this,AwasActivity.class));
+                }
             }
         });
 
@@ -119,6 +150,38 @@ public class MainActivity extends AppCompatActivity {
             public void onAdClosed() {
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
+            }
+        });
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
             }
         });
     }

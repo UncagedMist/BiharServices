@@ -48,8 +48,6 @@ public class RationActivity extends AppCompatActivity {
 
     private InterstitialAd mInterstitialAd;
 
-    private final static int BUFFER_SIZE = 1024;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,8 +86,6 @@ public class RationActivity extends AppCompatActivity {
 
         aboveBanner = findViewById(R.id.aboveBanner);
         bottomBanner = findViewById(R.id.belowBanner);
-
-        loadInterstitial();
 
         AdRequest adRequest = new AdRequest.Builder().build();
 
@@ -203,98 +199,126 @@ public class RationActivity extends AppCompatActivity {
         });
     }
 
-    private void loadInterstitial() {
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            Log.d("TAG", "The interstitial wasn't loaded yet.");
-        }
-    }
-
     private void onclickImplement() {
         btnFormA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                askForPermission();
-                copyAsset("pra_k.pdf");
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    askForPermission();
+                    copyAsset("pra_k.pdf");
+                }
             }
         });
 
         btnFormB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                askForPermission();
-                copyAsset("pra_kh.pdf");
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    askForPermission();
+                    copyAsset("pra_kh.pdf");
+                }
             }
         });
 
         btnCheckStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RationActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.CHECK_STATUS_URL);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(RationActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.CHECK_STATUS_URL);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnRationAllot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RationActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.CHECK_ALLOT_URL);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(RationActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.CHECK_ALLOT_URL);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnDealer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RationActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.DEALER_URL);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(RationActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.DEALER_URL);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RationActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.OFFICIAL_URL);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(RationActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.OFFICIAL_URL);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnAadhaar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RationActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.AADHAAR_URL);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(RationActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.AADHAAR_URL);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RationActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.DOWNLOAD_URL);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(RationActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.DOWNLOAD_URL);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RationActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.SEARCH_URL);
-                startActivity(intent);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(RationActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.SEARCH_URL);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }

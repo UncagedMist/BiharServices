@@ -74,70 +74,105 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.APPLY_VOTER);
-                startActivity(intent);
-                finish();
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+                else {
+                    Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.APPLY_VOTER);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.DOWNLOAD_VOTER);
-                startActivity(intent);
-                finish();
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+                else {
+                    Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.DOWNLOAD_VOTER);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.EDIT_VOTER);
-                startActivity(intent);
-                finish();
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+                else {
+                    Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.EDIT_VOTER);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.SEARCH_VOTER);
-                startActivity(intent);
-                finish();
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+                else {
+                    Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.SEARCH_VOTER);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.TRACK_VOTER);
-                startActivity(intent);
-                finish();
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+                else {
+                    Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.TRACK_VOTER);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnReprint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.VOTER_REPRINT);
-                startActivity(intent);
-                finish();
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+                else {
+                    Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.VOTER_REPRINT);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         btnServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
-                intent.putExtra("url", Common.VOTER_SERVICES);
-                startActivity(intent);
-                finish();
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+                else {
+                    Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
+                    intent.putExtra("url", Common.VOTER_SERVICES);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }
@@ -146,7 +181,6 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         mRewardedVideoAd.loadAd("ca-app-pub-5860770870597755/9362447560",
                 new AdRequest.Builder().build());
     }
-
 
     private void adMethod() {
         aboveBanner.setAdListener(new AdListener() {
