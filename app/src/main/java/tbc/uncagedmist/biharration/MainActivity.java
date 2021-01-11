@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,14 +13,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.bestsoft32.tt_fancy_gif_dialog_lib.TTFancyGifDialog;
-import com.bestsoft32.tt_fancy_gif_dialog_lib.TTFancyGifDialogListener;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.OnSuccessListener;
+import com.google.android.play.core.tasks.Task;
 
 import java.util.Locale;
 
@@ -37,12 +40,16 @@ public class MainActivity extends AppCompatActivity {
 
     private InterstitialAd mInterstitialAd;
 
+    ReviewManager manager;
+    ReviewInfo reviewInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadLocale();
         setContentView(R.layout.activity_main);
 
+        manager = ReviewManagerFactory.create(MainActivity.this);
         noInternetDialog = new NoInternetDialog.Builder(MainActivity.this).build();
 
         mInterstitialAd = new InterstitialAd(this);
@@ -236,26 +243,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        new TTFancyGifDialog.Builder(MainActivity.this)
-                .setTitle("UncagedMist")
-                .setMessage("Support us by downloading our other apps!")
-                .setPositiveBtnText("Support")
-                .setPositiveBtnBackground("#22b573")
-                .setNegativeBtnText("Don't")
-                .setNegativeBtnBackground("#c1272d")
-                .setGifResource(R.drawable.thank)
-                .isCancellable(false)
-                .OnPositiveClicked(new TTFancyGifDialogListener() {
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                reviewInfo  = task.getResult();
+                Task<Void> flow = manager.launchReviewFlow(MainActivity.this,reviewInfo);
+
+                flow.addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void OnClick() {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pub:UncagedMist")));
+                    public void onSuccess(Void result) {
+
                     }
-                })
-                .OnNegativeClicked(new TTFancyGifDialogListener() {
-                    @Override
-                    public void OnClick() {
-                    }
-                }).build();
+                });
+            }
+            else {
+                Toast.makeText(this, "ERROR...", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
