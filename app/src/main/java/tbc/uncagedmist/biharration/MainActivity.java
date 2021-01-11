@@ -1,5 +1,6 @@
 package tbc.uncagedmist.biharration;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -20,9 +22,15 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.OnCompleteListener;
 import com.google.android.play.core.tasks.OnSuccessListener;
 import com.google.android.play.core.tasks.Task;
 
@@ -32,6 +40,7 @@ import am.appwise.components.ni.NoInternetDialog;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE = 5152;
     Button btnRation, btnVoter, btnLang,btnAwas;
 
     AdView bottomBanner;
@@ -46,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkAppUpdate();
         loadLocale();
         setContentView(R.layout.activity_main);
 
@@ -123,6 +133,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         adMethod();
+    }
+
+    private void checkAppUpdate() {
+        final AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(MainActivity.this);
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(new OnSuccessListener<AppUpdateInfo>() {
+            @Override
+            public void onSuccess(AppUpdateInfo result) {
+
+                if (result.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                        result.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE))    {
+
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(result,AppUpdateType.IMMEDIATE,MainActivity.this,REQUEST_CODE);
+                    } catch (IntentSender.SendIntentException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     private void adMethod() {
@@ -244,20 +275,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Task<ReviewInfo> request = manager.requestReviewFlow();
-        request.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                reviewInfo  = task.getResult();
-                Task<Void> flow = manager.launchReviewFlow(MainActivity.this,reviewInfo);
 
-                flow.addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void result) {
+        request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
+            @Override
+            public void onComplete(@NonNull Task<ReviewInfo> task) {
+                if (task.isSuccessful())    {
+                    reviewInfo = task.getResult();
 
-                    }
-                });
-            }
-            else {
-                Toast.makeText(this, "ERROR...", Toast.LENGTH_SHORT).show();
+                    Task<Void> flow = manager.launchReviewFlow(MainActivity.this,reviewInfo);
+
+                    flow.addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void result) {
+
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "ERROR...", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
