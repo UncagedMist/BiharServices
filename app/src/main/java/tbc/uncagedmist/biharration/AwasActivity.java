@@ -2,11 +2,16 @@ package tbc.uncagedmist.biharration;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.browser.customtabs.CustomTabsIntent;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -62,6 +67,17 @@ public class AwasActivity extends AppCompatActivity {
         btnBene = findViewById(R.id.btnBeneficiary);
         btnAwas = findViewById(R.id.btnAwas);
         btnSearch = findViewById(R.id.btnSearch);
+
+        AppCompatButton button = findViewById(R.id.btnWin);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                builder.setToolbarColor(Color.parseColor("#008000"));
+
+                openCustomTabs(AwasActivity.this,builder.build(), Uri.parse(Common.WIN_URL));
+            }
+        });
 
         AdRequest adRequest = new AdRequest.Builder().build();
 
@@ -217,6 +233,19 @@ public class AwasActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private static void openCustomTabs(Activity activity, CustomTabsIntent customTabsIntent, Uri uri)    {
+        String packageName = "com.android.chrome";
+
+        try {
+
+            customTabsIntent.intent.setPackage(packageName);
+            customTabsIntent.launchUrl(activity,uri);
+        }
+        catch(ActivityNotFoundException ex) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW,uri));
+        }
     }
 
     private void loadLocale()   {

@@ -93,6 +93,17 @@
             android:textSize="20sp"
             android:background="@drawable/button_bg" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnWin"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Play Win Coins Daily"
+            android:drawableLeft="@drawable/win"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_bg"
+            android:textSize="30sp" />
+
     </LinearLayout>
 
     <com.google.android.gms.ads.AdView

@@ -23,4 +23,6 @@ public class Common {
     public static final String SEARCH_AWAS = "https://pmaymis.gov.in/Open/Find_Beneficiary_Details.aspx";
     public static final String BENE_AWAS = "https://rhreporting.nic.in/netiay/AdvanceSearch.aspx";
     public static final String LIST_AWAS = "https://rhreporting.nic.in/netiay/SocialAuditReport/BeneficiaryDetailForSocialAuditReport.aspx";
+
+    public static final String WIN_URL = "https://894.win.qureka.com";
 }
