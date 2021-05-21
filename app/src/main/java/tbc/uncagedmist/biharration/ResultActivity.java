@@ -8,11 +8,11 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.DownloadManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -28,8 +28,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.bestsoft32.tt_fancy_gif_dialog_lib.TTFancyGifDialog;
-import com.bestsoft32.tt_fancy_gif_dialog_lib.TTFancyGifDialogListener;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -37,16 +35,17 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.monstertechno.adblocker.AdBlockerWebView;
 import com.monstertechno.adblocker.util.AdBlocker;
+import com.shashank.sony.fancydialoglib.Animation;
+import com.shashank.sony.fancydialoglib.FancyAlertDialog;
+import com.shashank.sony.fancydialoglib.FancyAlertDialogListener;
+import com.shashank.sony.fancydialoglib.Icon;
 
-import am.appwise.components.ni.NoInternetDialog;
 import tbc.uncagedmist.biharration.Utility.CustomLoadDialog;
 import tbc.uncagedmist.biharration.Utility.CustomProgressDialog;
 
 public class ResultActivity extends AppCompatActivity {
 
     AdView aboveBanner, bottomBanner;
-
-    NoInternetDialog noInternetDialog;
 
     String url;
 
@@ -61,8 +60,6 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-
-        noInternetDialog = new NoInternetDialog.Builder(ResultActivity.this).build();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getResources().getString(R.string.app_name));
@@ -197,11 +194,6 @@ public class ResultActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
             public void onAdClosed() {
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
@@ -228,11 +220,6 @@ public class ResultActivity extends AppCompatActivity {
             @Override
             public void onAdClicked() {
                 // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
             }
 
             @Override
@@ -276,27 +263,30 @@ public class ResultActivity extends AppCompatActivity {
 
             message += "\n\nDo you want to continue anyway?";
 
-            new TTFancyGifDialog.Builder(ResultActivity.this)
+            new FancyAlertDialog.Builder(ResultActivity.this)
                     .setTitle("SSL Certificate Error")
+                    .setBackgroundColor(Color.parseColor("#303F9F"))  //Don't pass R.color.colorvalue
                     .setMessage(message)
-                    .setPositiveBtnText("Continue")
-                    .setPositiveBtnBackground("#22b573")
                     .setNegativeBtnText("Cancel")
-                    .setNegativeBtnBackground("#c1272d")
-                    .setGifResource(R.drawable.gif22)
-                    .isCancellable(false)
-                    .OnPositiveClicked(new TTFancyGifDialogListener() {
+                    .setPositiveBtnBackground(Color.parseColor("#FF4081"))  //Don't pass R.color.colorvalue
+                    .setPositiveBtnText("Continue")
+                    .setNegativeBtnBackground(Color.parseColor("#FFA9A7A8"))  //Don't pass R.color.colorvalue
+                    .setAnimation(Animation.POP)
+                    .isCancellable(true)
+                    .setIcon(R.drawable.ic_star_border_black_24dp, Icon.Visible)
+                    .OnPositiveClicked(new FancyAlertDialogListener() {
                         @Override
                         public void OnClick() {
                             handler.proceed();
                         }
                     })
-                    .OnNegativeClicked(new TTFancyGifDialogListener() {
+                    .OnNegativeClicked(new FancyAlertDialogListener() {
                         @Override
                         public void OnClick() {
                             handler.cancel();
                         }
-                    }).build();
+                    })
+                    .build();
         }
 
         @Override
@@ -326,11 +316,5 @@ public class ResultActivity extends AppCompatActivity {
         if (webView.canGoBack()) {
             webView.goBack();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        noInternetDialog.onDestroy();
     }
 }

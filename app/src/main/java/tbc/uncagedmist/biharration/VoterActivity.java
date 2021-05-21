@@ -1,5 +1,6 @@
 package tbc.uncagedmist.biharration;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -13,6 +14,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,24 +22,22 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardItem;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import java.util.Locale;
 
-import am.appwise.components.ni.NoInternetDialog;
 import tbc.uncagedmist.biharration.Common.Common;
 
-public class VoterActivity extends AppCompatActivity implements RewardedVideoAdListener {
+public class VoterActivity extends AppCompatActivity {
 
     AdView aboveBanner, bottomBanner;
-    NoInternetDialog noInternetDialog;
 
     Button btnApply, btnDownload, btnEdit, btnSearch,btnTrack, btnReprint, btnServices;
 
-    private RewardedVideoAd mRewardedVideoAd;
+    private RewardedAd mRewardedAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +45,26 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         loadLocale();
         setContentView(R.layout.activity_voter);
 
-        noInternetDialog = new NoInternetDialog.Builder(VoterActivity.this).build();
-
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardedVideoAd.setRewardedVideoAdListener(this);
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getResources().getString(R.string.app_name));
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        RewardedAd.load(this, "ca-app-pub-5860770870597755/9362447560",
+                adRequest, new RewardedAdLoadCallback(){
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error.
+                        Log.d("TAG", loadAdError.getMessage());
+                        mRewardedAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        mRewardedAd = rewardedAd;
+                        Log.d("TAG", "Ad was loaded.");
+                    }
+                });
 
         aboveBanner = findViewById(R.id.aboveBanner);
         bottomBanner = findViewById(R.id.belowBanner);
@@ -76,8 +89,6 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
             }
         });
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-
         aboveBanner.loadAd(adRequest);
         bottomBanner.loadAd(adRequest);
 
@@ -91,8 +102,14 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mRewardedVideoAd.show();
+                if (mRewardedAd != null) {
+                    Activity activityContext = VoterActivity.this;
+                    mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            // Handle the reward.
+                        }
+                    });
                 }
                 else {
                     Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
@@ -106,8 +123,14 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mRewardedVideoAd.show();
+                if (mRewardedAd != null) {
+                    Activity activityContext = VoterActivity.this;
+                    mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            // Handle the reward.
+                        }
+                    });
                 }
                 else {
                     Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
@@ -121,8 +144,14 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mRewardedVideoAd.show();
+                if (mRewardedAd != null) {
+                    Activity activityContext = VoterActivity.this;
+                    mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            // Handle the reward.
+                        }
+                    });
                 }
                 else {
                     Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
@@ -136,8 +165,14 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mRewardedVideoAd.show();
+                if (mRewardedAd != null) {
+                    Activity activityContext = VoterActivity.this;
+                    mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            // Handle the reward.
+                        }
+                    });
                 }
                 else {
                     Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
@@ -151,8 +186,14 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         btnTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mRewardedVideoAd.show();
+                if (mRewardedAd != null) {
+                    Activity activityContext = VoterActivity.this;
+                    mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            // Handle the reward.
+                        }
+                    });
                 }
                 else {
                     Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
@@ -166,8 +207,14 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         btnReprint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mRewardedVideoAd.show();
+                if (mRewardedAd != null) {
+                    Activity activityContext = VoterActivity.this;
+                    mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            // Handle the reward.
+                        }
+                    });
                 }
                 else {
                     Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
@@ -181,8 +228,14 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         btnServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mRewardedVideoAd.show();
+                if (mRewardedAd != null) {
+                    Activity activityContext = VoterActivity.this;
+                    mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            // Handle the reward.
+                        }
+                    });
                 }
                 else {
                     Intent intent = new Intent(VoterActivity.this,ResultActivity.class);
@@ -207,11 +260,6 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         }
     }
 
-    private void loadRewardedVideoAd() {
-        mRewardedVideoAd.loadAd("ca-app-pub-5860770870597755/9362447560",
-                new AdRequest.Builder().build());
-    }
-
     private void adMethod() {
         aboveBanner.setAdListener(new AdListener() {
             @Override
@@ -233,11 +281,6 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
             @Override
             public void onAdClicked() {
                 // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
             }
 
             @Override
@@ -271,11 +314,6 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
             }
 
             @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
             public void onAdClosed() {
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
@@ -287,44 +325,6 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         SharedPreferences prefs = getSharedPreferences("Settings", Activity.MODE_PRIVATE);
         String language = prefs.getString("My_Lang","");
         setLocale(language);
-    }
-    @Override
-    public void onRewarded(RewardItem reward) {
-    }
-
-    @Override
-    public void onRewardedVideoAdLeftApplication() {
-    }
-
-    @Override
-    public void onRewardedVideoAdClosed() {
-        loadRewardedVideoAd();
-    }
-
-    @Override
-    public void onRewardedVideoAdFailedToLoad(int errorCode) {
-        if (mRewardedVideoAd.isLoaded()) {
-            mRewardedVideoAd.show();
-        }
-    }
-
-    @Override
-    public void onRewardedVideoAdLoaded() {
-        if (mRewardedVideoAd.isLoaded()) {
-            mRewardedVideoAd .show();
-        }
-    }
-
-    @Override
-    public void onRewardedVideoAdOpened() {
-    }
-
-    @Override
-    public void onRewardedVideoStarted() {
-    }
-
-    @Override
-    public void onRewardedVideoCompleted() {
     }
 
     private void setLocale(String lang) {
@@ -338,24 +338,5 @@ public class VoterActivity extends AppCompatActivity implements RewardedVideoAdL
         SharedPreferences.Editor editor = getSharedPreferences("Settings",MODE_PRIVATE).edit();
         editor.putString("My_Lang",lang);
         editor.apply();
-    }
-
-    @Override
-    public void onResume() {
-        mRewardedVideoAd.resume(this);
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        mRewardedVideoAd.pause(this);
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        mRewardedVideoAd.destroy(this);
-        super.onDestroy();
-        noInternetDialog.onDestroy();
     }
 }

@@ -1,5 +1,6 @@
 package tbc.uncagedmist.biharration;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -21,11 +22,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -40,7 +44,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
 
-import am.appwise.components.ni.NoInternetDialog;
 import tbc.uncagedmist.biharration.Common.Common;
 
 public class RationActivity extends AppCompatActivity {
@@ -48,8 +51,6 @@ public class RationActivity extends AppCompatActivity {
     AdView aboveBanner, bottomBanner;
 
     Button btnFormA,btnFormB,btnCheckStatus,btnRationAllot,btnDealer,btnHome,btnAadhaar,btnDownload,btnSearch;
-
-    NoInternetDialog noInternetDialog;
 
     private InterstitialAd mInterstitialAd;
 
@@ -59,23 +60,43 @@ public class RationActivity extends AppCompatActivity {
         loadLocale();
         setContentView(R.layout.activity_ration);
 
-        noInternetDialog = new NoInternetDialog.Builder(RationActivity.this).build();
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getResources().getString(R.string.app_name));
 
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-5860770870597755/7010604637");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        AdRequest adRequest = new AdRequest.Builder().build();
 
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                // Load the next interstitial.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
+        InterstitialAd.load(
+                RationActivity.this,
+                "ca-app-pub-5860770870597755/7010604637",
+                adRequest, new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        mInterstitialAd = interstitialAd;
 
-        });
+                        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
+                            @Override
+                            public void onAdDismissedFullScreenContent() {
+                                Log.d("TAG", "The ad was dismissed.");
+                            }
+
+                            @Override
+                            public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                Log.d("TAG", "The ad failed to show.");
+                            }
+
+                            @Override
+                            public void onAdShowedFullScreenContent() {
+                                mInterstitialAd = null;
+                                Log.d("TAG", "The ad was shown.");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        mInterstitialAd = null;
+                    }
+                });
 
         btnFormA = findViewById(R.id.btnFormA);
         btnFormB = findViewById(R.id.btnFormB);
@@ -103,8 +124,6 @@ public class RationActivity extends AppCompatActivity {
                 openCustomTabs(RationActivity.this,builder.build(),Uri.parse(Common.WIN_URL));
             }
         });
-
-        AdRequest adRequest = new AdRequest.Builder().build();
 
         aboveBanner.loadAd(adRequest);
         bottomBanner.loadAd(adRequest);
@@ -138,11 +157,6 @@ public class RationActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
             public void onAdClosed() {
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
@@ -172,48 +186,12 @@ public class RationActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
             public void onAdClosed() {
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
             }
         });
 
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
-
-            @Override
-            public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when the ad is displayed.
-            }
-
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the interstitial ad is closed.
-            }
-        });
     }
 
     private static void openCustomTabs(Activity activity, CustomTabsIntent customTabsIntent, Uri uri)    {
@@ -233,9 +211,10 @@ public class RationActivity extends AppCompatActivity {
         btnFormA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(RationActivity.this);
+                }
+                else {
                     askForPermission();
                     copyAsset("pra_k.pdf");
                 }
@@ -245,9 +224,10 @@ public class RationActivity extends AppCompatActivity {
         btnFormB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(RationActivity.this);
+                }
+                else {
                     askForPermission();
                     copyAsset("pra_kh.pdf");
                 }
@@ -257,9 +237,10 @@ public class RationActivity extends AppCompatActivity {
         btnCheckStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(RationActivity.this);
+                }
+                else {
                     Intent intent = new Intent(RationActivity.this,ResultActivity.class);
                     intent.putExtra("url", Common.CHECK_STATUS_URL);
                     startActivity(intent);
@@ -271,9 +252,10 @@ public class RationActivity extends AppCompatActivity {
         btnRationAllot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(RationActivity.this);
+                }
+                else {
                     Intent intent = new Intent(RationActivity.this,ResultActivity.class);
                     intent.putExtra("url", Common.CHECK_ALLOT_URL);
                     startActivity(intent);
@@ -285,9 +267,10 @@ public class RationActivity extends AppCompatActivity {
         btnDealer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(RationActivity.this);
+                }
+                else {
                     Intent intent = new Intent(RationActivity.this,ResultActivity.class);
                     intent.putExtra("url", Common.DEALER_URL);
                     startActivity(intent);
@@ -299,9 +282,10 @@ public class RationActivity extends AppCompatActivity {
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(RationActivity.this);
+                }
+                else {
                     Intent intent = new Intent(RationActivity.this,ResultActivity.class);
                     intent.putExtra("url", Common.OFFICIAL_URL);
                     startActivity(intent);
@@ -313,9 +297,10 @@ public class RationActivity extends AppCompatActivity {
         btnAadhaar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(RationActivity.this);
+                }
+                else {
                     Intent intent = new Intent(RationActivity.this,ResultActivity.class);
                     intent.putExtra("url", Common.AADHAAR_URL);
                     startActivity(intent);
@@ -327,9 +312,10 @@ public class RationActivity extends AppCompatActivity {
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(RationActivity.this);
+                }
+                else {
                     Intent intent = new Intent(RationActivity.this,ResultActivity.class);
                     intent.putExtra("url", Common.DOWNLOAD_URL);
                     startActivity(intent);
@@ -341,9 +327,10 @@ public class RationActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(RationActivity.this);
+                }
+                else {
                     Intent intent = new Intent(RationActivity.this,ResultActivity.class);
                     intent.putExtra("url", Common.SEARCH_URL);
                     startActivity(intent);
@@ -446,11 +433,5 @@ public class RationActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences("Settings",MODE_PRIVATE).edit();
         editor.putString("My_Lang",lang);
         editor.apply();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        noInternetDialog.onDestroy();
     }
 }
