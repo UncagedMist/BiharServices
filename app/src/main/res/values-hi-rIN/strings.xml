@@ -29,4 +29,9 @@
     <string name="beneficiaryList">लाभार्थी सूची</string>
     <string name="awasList">नई अवास सूची</string>
     <string name="searchBeneficiary">लाभार्थी खोजें</string>
+
+    <string name="FB_APP_ID">308172347695562</string>
+
+    <string name="FB_BANNER">308172347695562_308173487695448</string>
+    <string name="FB_FULL">308172347695562_308173651028765</string>
 </resources>

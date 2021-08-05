@@ -23,16 +23,19 @@
 
         <activity android:name=".AwasActivity"
             android:screenOrientation="portrait"/>
+
         <activity android:name=".ResultActivity"
             android:screenOrientation="portrait"/>
+
         <activity android:name=".RationActivity"
             android:screenOrientation="portrait"/>
+
         <activity android:name=".VoterActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5860770870597755~5430145253" />
+            android:value="@string/FB_APP_ID" />
 
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -48,13 +51,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-    </application>
 
-    <queries>
-        <intent>
-            <action android:name=
-                "android.support.customtabs.action.CustomTabsService" />
-        </intent>
-    </queries>
+    </application>
 
 </manifest>

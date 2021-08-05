@@ -1,5 +1,6 @@
 package tbc.uncagedmist.biharration.Utility;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -7,22 +8,17 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.AdapterStatus;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-
-import java.util.Map;
+import com.facebook.ads.AudienceNetworkAds;;
 
 public class MyApplicationClass extends Application {
 
+    @SuppressLint("StaticFieldLeak")
     private static Context context;
 
-    private static AppOpenManager appOpenManager;
-
+    @SuppressLint("StaticFieldLeak")
     public static Activity mActivity;
+
     MyNetworkReceiver mNetworkReceiver;
 
     public static Context getContext() {
@@ -32,26 +28,9 @@ public class MyApplicationClass extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        AudienceNetworkAds.initialize(this);
 
         context = getApplicationContext();
-
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-
-                Map<String, AdapterStatus> statusMap = initializationStatus.getAdapterStatusMap();
-                for (String adapterClass : statusMap.keySet()) {
-                    AdapterStatus status = statusMap.get(adapterClass);
-                    Log.d("BiharRationCard", String.format(
-                            "Adapter name: %s, Description: %s, Latency: %d",
-                            adapterClass, status.getDescription(), status.getLatency()));
-                }
-
-
-            }
-        });
-
-        appOpenManager = new AppOpenManager(this);
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
@@ -93,6 +72,7 @@ public class MyApplicationClass extends Application {
         });
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private void registerNetworkBroadcastForLollipop() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));

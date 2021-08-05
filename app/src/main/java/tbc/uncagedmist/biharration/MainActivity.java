@@ -5,7 +5,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.browser.customtabs.CustomTabsIntent;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -20,16 +19,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.AdSize;
+import com.facebook.ads.AdView;
+import com.facebook.ads.InterstitialAd;
+import com.facebook.ads.InterstitialAdListener;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
@@ -51,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 5152;
     Button btnRation, btnVoter, btnLang,btnAwas;
 
-    AdView bottomBanner;
+    AdView adView;
 
-    private InterstitialAd mInterstitialAd;
+    private InterstitialAd interstitialAd;
 
     ReviewManager manager;
     ReviewInfo reviewInfo;
@@ -66,40 +65,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         manager = ReviewManagerFactory.create(MainActivity.this);
-        AdRequest adRequest = new AdRequest.Builder().build();
 
-        InterstitialAd.load(
-                MainActivity.this,
-                "ca-app-pub-5860770870597755/7010604637",
-                adRequest, new InterstitialAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                        mInterstitialAd = interstitialAd;
-
-                        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
-                            @Override
-                            public void onAdDismissedFullScreenContent() {
-                                Log.d("TAG", "The ad was dismissed.");
-                            }
-
-                            @Override
-                            public void onAdFailedToShowFullScreenContent(AdError adError) {
-                                Log.d("TAG", "The ad failed to show.");
-                            }
-
-                            @Override
-                            public void onAdShowedFullScreenContent() {
-                                mInterstitialAd = null;
-                                Log.d("TAG", "The ad was shown.");
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        mInterstitialAd = null;
-                    }
-                });
+        loadBanner();
+        loadFull();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getResources().getString(R.string.app_name));
@@ -109,27 +77,12 @@ public class MainActivity extends AppCompatActivity {
         btnLang = findViewById(R.id.btnLang);
         btnAwas = findViewById(R.id.btnAwas);
 
-        bottomBanner = findViewById(R.id.belowBanner);
-
-        AppCompatButton button = findViewById(R.id.btnWin);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                builder.setToolbarColor(Color.parseColor("#008000"));
-
-                openCustomTabs(MainActivity.this,builder.build(),Uri.parse(Common.WIN_URL));
-            }
-        });
-
-        bottomBanner.loadAd(adRequest);
 
         btnRation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null) {
-                    mInterstitialAd.show(MainActivity.this);
+                if (interstitialAd.isAdLoaded()) {
+                    interstitialAd.show();
                 }
                 else {
                     startActivity(new Intent(MainActivity.this,RationActivity.class));
@@ -140,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
         btnVoter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null) {
-                    mInterstitialAd.show(MainActivity.this);
+                if (interstitialAd.isAdLoaded()) {
+                    interstitialAd.show();
                 }
                 else {
                     startActivity(new Intent(MainActivity.this,VoterActivity.class));
@@ -159,16 +112,106 @@ public class MainActivity extends AppCompatActivity {
         btnAwas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null) {
-                    mInterstitialAd.show(MainActivity.this);
+                if (interstitialAd.isAdLoaded()) {
+                    interstitialAd.show();
                 }
                 else {
                     startActivity(new Intent(MainActivity.this,AwasActivity.class));
                 }
             }
         });
+    }
 
-        adMethod();
+    private void loadFull() {
+        interstitialAd = new InterstitialAd(
+                this,
+                getString(R.string.FB_FULL)
+        );
+        // Create listeners for the Interstitial Ad
+        InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
+            @Override
+            public void onInterstitialDisplayed(Ad ad) {
+                // Interstitial ad displayed callback
+                Log.e("TAG", "Interstitial ad displayed.");
+            }
+
+            @Override
+            public void onInterstitialDismissed(Ad ad) {
+                // Interstitial dismissed callback
+                Log.e("TAG", "Interstitial ad dismissed.");
+            }
+
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                // Ad error callback
+                Log.e("TAG", "Interstitial ad failed to load: " + adError.getErrorMessage());
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+                // Interstitial ad is loaded and ready to be displayed
+                Log.d("TAG", "Interstitial ad is loaded and ready to be displayed!");
+                // Show the ad
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+                // Ad clicked callback
+                Log.d("TAG", "Interstitial ad clicked!");
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+                // Ad impression logged callback
+                Log.d("TAG", "Interstitial ad impression logged!");
+            }
+        };
+
+        // For auto play video ads, it's recommended to load the ad
+        // at least 30 seconds before it is shown
+        interstitialAd.loadAd(
+                interstitialAd.buildLoadAdConfig()
+                        .withAdListener(interstitialAdListener)
+                        .build());
+    }
+
+    private void loadBanner() {
+        adView = new AdView(
+                this,
+                getString(R.string.FB_BANNER),
+                AdSize.BANNER_HEIGHT_50);
+
+        // Find the Ad Container
+        LinearLayout adContainer = findViewById(R.id.banner_container);
+
+        // Add the ad view to your activity layout
+        adContainer.addView(adView);
+
+        AdListener adListener = new AdListener() {
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                // Ad error callback
+
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+                // Ad loaded callback
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+                // Ad clicked callback
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+                // Ad impression logged callback
+            }
+        };
+
+        // Request an ad
+        adView.loadAd(adView.buildLoadAdConfig().withAdListener(adListener).build());
     }
 
     private void checkAppUpdate() {
@@ -188,50 +231,6 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-            }
-        });
-    }
-
-    private static void openCustomTabs(Activity activity, CustomTabsIntent customTabsIntent, Uri uri)    {
-        String packageName = "com.android.chrome";
-
-        try {
-
-            customTabsIntent.intent.setPackage(packageName);
-            customTabsIntent.launchUrl(activity,uri);
-        }
-        catch(ActivityNotFoundException ex) {
-            activity.startActivity(new Intent(Intent.ACTION_VIEW,uri));
-        }
-    }
-
-    private void adMethod() {
-        bottomBanner.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
-
-            @Override
-            public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
-
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
             }
         });
     }
@@ -308,5 +307,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        if (interstitialAd != null) {
+            interstitialAd.destroy();
+        }
+        super.onDestroy();
     }
 }

@@ -27,11 +27,14 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.LoadAdError;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.AdSize;
+import com.facebook.ads.AdView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.monstertechno.adblocker.AdBlockerWebView;
 import com.monstertechno.adblocker.util.AdBlocker;
@@ -40,19 +43,14 @@ import com.shashank.sony.fancydialoglib.FancyAlertDialog;
 import com.shashank.sony.fancydialoglib.FancyAlertDialogListener;
 import com.shashank.sony.fancydialoglib.Icon;
 
-import tbc.uncagedmist.biharration.Utility.CustomLoadDialog;
-import tbc.uncagedmist.biharration.Utility.CustomProgressDialog;
-
 public class ResultActivity extends AppCompatActivity {
 
-    AdView aboveBanner, bottomBanner;
+    AdView adView;
+    ProgressBar progressBar;
 
     String url;
 
     WebView webView;
-
-    CustomLoadDialog loadDialog;
-    CustomProgressDialog progressDialog;
 
     FloatingActionButton resultShare,resultBack;
 
@@ -61,6 +59,8 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+        loadBanner();
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getResources().getString(R.string.app_name));
 
@@ -68,25 +68,13 @@ public class ResultActivity extends AppCompatActivity {
 
         url = intent.getStringExtra("url");
 
-        loadDialog = new CustomLoadDialog(this);
-        progressDialog = new CustomProgressDialog(this);
-
-        loadDialog.showDialog();
-
-        aboveBanner = findViewById(R.id.aboveBanner);
-        bottomBanner = findViewById(R.id.belowBanner);
-
+        progressBar = findViewById(R.id.progressBar);
         resultShare = findViewById(R.id.resultShare);
         resultBack = findViewById(R.id.resultBack);
 
         webView = findViewById(R.id.webView);
 
         new AdBlockerWebView.init(this).initializeWebView(webView);
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-
-        aboveBanner.loadAd(adRequest);
-        bottomBanner.loadAd(adRequest);
 
         webView.setWebViewClient(new MyWebViewClient());
 
@@ -98,8 +86,6 @@ public class ResultActivity extends AppCompatActivity {
         webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
         webView.loadUrl(url);
-
-        adMethod();
 
         resultShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,64 +156,43 @@ public class ResultActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void adMethod() {
-        aboveBanner.setAdListener(new AdListener() {
+    private void loadBanner() {
+        adView = new AdView(
+                this,
+                getString(R.string.FB_BANNER),
+                AdSize.BANNER_HEIGHT_50);
+
+        // Find the Ad Container
+        LinearLayout adContainer = findViewById(R.id.banner_container);
+
+        // Add the ad view to your activity layout
+        adContainer.addView(adView);
+
+        AdListener adListener = new AdListener() {
             @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
+            public void onError(Ad ad, AdError adError) {
+                // Ad error callback
+
             }
 
             @Override
-            public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
+            public void onAdLoaded(Ad ad) {
+                // Ad loaded callback
             }
 
             @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
+            public void onAdClicked(Ad ad) {
+                // Ad clicked callback
             }
 
             @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
+            public void onLoggingImpression(Ad ad) {
+                // Ad impression logged callback
             }
+        };
 
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
-            }
-        });
-
-        bottomBanner.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
-
-            @Override
-            public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
-
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
-            }
-        });
+        // Request an ad
+        adView.loadAd(adView.buildLoadAdConfig().withAdListener(adListener).build());
     }
 
     private class MyWebViewClient extends WebViewClient {
@@ -298,16 +263,12 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-            loadDialog.hideDialog();
-            progressDialog.showProgressDialog();
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            if(progressDialog!=null){
-                progressDialog.hideProgressDialog();
-            }
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -316,5 +277,13 @@ public class ResultActivity extends AppCompatActivity {
         if (webView.canGoBack()) {
             webView.goBack();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        super.onDestroy();
     }
 }
