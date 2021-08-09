@@ -8,10 +8,10 @@
     tools:context=".VoterActivity">
 
     <LinearLayout
+        android:layout_above="@id/banner_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerVertical="true">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btnApply"
