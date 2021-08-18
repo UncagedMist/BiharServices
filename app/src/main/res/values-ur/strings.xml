@@ -30,8 +30,10 @@
     <string name="awasList">رہائش گاہ کی نئی فہرست</string>
     <string name="searchBeneficiary">فائدہ اٹھانے والا تلاش کریں</string>
 
-    <string name="FB_APP_ID">308172347695562</string>
+    <string name="ADMOB_APP_ID">ca-app-pub-5860770870597755~5430145253</string>
 
-    <string name="FB_BANNER">308172347695562_308173487695448</string>
-    <string name="FB_FULL">308172347695562_308173651028765</string>
+    <string name="ADMOB_BANNER">ca-app-pub-5860770870597755/7010820239</string>
+    <string name="ADMOB_OPEN">ca-app-pub-5860770870597755/1490900240</string>
+    <string name="ADMOB_REWARDED">ca-app-pub-5860770870597755/9362447560</string>
+    <string name="ADMOB_FULL">ca-app-pub-5860770870597755/7010604637</string>
 </resources>

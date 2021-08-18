@@ -9,7 +9,10 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.facebook.ads.AudienceNetworkAds;;
+import com.facebook.ads.AudienceNetworkAds;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;;
 
 public class MyApplicationClass extends Application {
 
@@ -25,12 +28,22 @@ public class MyApplicationClass extends Application {
         return context;
     }
 
+    @SuppressLint("StaticFieldLeak")
+    private static AppOpenManager appOpenManager;
+
     @Override
     public void onCreate() {
         super.onCreate();
         AudienceNetworkAds.initialize(this);
 
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) { }
+        });
+
         context = getApplicationContext();
+
+        appOpenManager = new AppOpenManager(this);
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override

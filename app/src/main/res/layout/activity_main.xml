@@ -1,83 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#67ffae"
-    tools:context=".MainActivity">
+    android:fitsSystemWindows="true"
+    android:background="@color/blue">
 
-    <ScrollView
-        android:layout_above="@id/banner_container"
-        android:layout_centerInParent="true"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/app_bar"/>
+
+        <FrameLayout
+            android:id="@+id/main_frame"
+            android:layout_above="@id/ad_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"/>
+
+        <FrameLayout
+            android:id="@+id/ad_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_above="@id/customBottomBar"/>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/image"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:src="@mipmap/ic_logo"
-                app:civ_border_width="2dp"
-                android:layout_marginTop="25dp"
-                android:layout_gravity="center"
-                app:civ_border_color="#FFF"/>
+        <tbc.uncagedmist.biharration.Utility.CurvedBottomNavigationView
+            android:id="@+id/customBottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:menu="@menu/menu_item"
+            android:layout_alignParentBottom="true"/>
 
-            <Button
-                android:layout_marginTop="10dp"
-                android:id="@+id/btnRation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/rationCard"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/button_bg"
-                android:textSize="30sp" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/stateShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/ad_container"
+            android:layout_margin="16dp"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/blue"
+            android:src="@drawable/ic_baseline_share_24" />
 
-            <Button
-                android:layout_marginTop="5dp"
-                android:id="@+id/btnVoter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/voterCard"
-                android:textColor="#FFFFFF"
-                android:textSize="30sp"
-                android:background="@drawable/button_bg" />
+    </RelativeLayout>
 
-            <Button
-                android:layout_marginTop="5dp"
-                android:id="@+id/btnAwas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/aawaasList"
-                android:textColor="#FFFFFF"
-                android:textSize="30sp"
-                android:background="@drawable/button_bg" />
-
-            <Button
-                android:id="@+id/btnLang"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/changeLang"
-                android:textColor="#FFFFFF"
-                android:layout_margin="25dp"
-                android:background="@drawable/button_bg" />
-
-
-        </LinearLayout>
-
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/banner_container"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_gravity="bottom|center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical" />
+        android:layout_margin="20sp"
+        app:tint="@android:color/white"
+        app:backgroundTint="@color/color1"/>
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

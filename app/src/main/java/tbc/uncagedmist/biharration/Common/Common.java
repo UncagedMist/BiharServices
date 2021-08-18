@@ -1,13 +1,16 @@
 package tbc.uncagedmist.biharration.Common;
 
+import android.content.Context;
+import android.content.Intent;
+
 public class Common {
 
     //Ration Card URLs
     public static final String CHECK_STATUS_URL = "http://164.100.130.239/RCIssueSystem/AwedanStatus.aspx";
-    public static final String CHECK_ALLOT_URL = "https://epos.bihar.gov.in/SRC_Trans_Int.jsp";
+    public static final String CHECK_ALLOT_URL = "http://epos.bihar.gov.in/SRC_Trans_Int.jsp";
     public static final String DEALER_URL = "http://sfc.bihar.gov.in/downloadEChallan.htm";
     public static final String OFFICIAL_URL = "http://epds.bihar.gov.in/";
-    public static final String AADHAAR_URL = "https://epos.bihar.gov.in/SRC_Trans_Int.jsp";
+    public static final String AADHAAR_URL = "http://epos.bihar.gov.in/SRC_Trans_Int.jsp";
     public static final String DOWNLOAD_URL = "http://epds.bihar.gov.in/DistrictWiseRationCardDetailsBH.aspx";
     public static final String SEARCH_URL = "http://epds.bihar.gov.in/SearchByRCID.aspx";
 
@@ -25,4 +28,16 @@ public class Common {
     public static final String LIST_AWAS = "https://rhreporting.nic.in/netiay/SocialAuditReport/BeneficiaryDetailForSocialAuditReport.aspx";
 
     public static final String WIN_URL = "https://894.win.qureka.com";
+
+    public static final String PRIVACY_URL = "https://docs.google.com/document/d/1h1ePmrfhM7mXCe_ctRi2w7IXRmrpWL6S1LYJ8-YpOfA/edit?usp=sharing";
+
+    public static String CurrentURL;
+
+    public static void shareApp(Context context)    {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        String message = "Never Miss A Thing About Ration Card. Install Bihar Ration Card App and Stay Updated! \n https://play.google.com/store/apps/details?id=tbc.uncagedmist.biharration";
+        intent.putExtra(Intent.EXTRA_TEXT, message);
+        context.startActivity(Intent.createChooser(intent, "Share Bihar Ration Card App Using"));
+    }
 }

@@ -13,7 +13,7 @@
         android:endColor="#A0BA"
         android:gradientRadius="30dp"
         android:type="radial"
-        android:startColor="#FF0" />
+        android:startColor="#A0BA" />
 
     <padding
         android:bottom="0dp"
