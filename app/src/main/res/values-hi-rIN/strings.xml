@@ -36,4 +36,5 @@
     <string name="ADMOB_OPEN">ca-app-pub-5860770870597755/1490900240</string>
     <string name="ADMOB_REWARDED">ca-app-pub-5860770870597755/9362447560</string>
     <string name="ADMOB_FULL">ca-app-pub-5860770870597755/7010604637</string>
+    <string name="IS_APP_KEY">10dc518cd</string>
 </resources>

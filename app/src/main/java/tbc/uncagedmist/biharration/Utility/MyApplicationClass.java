@@ -12,7 +12,8 @@ import android.os.Bundle;
 import com.facebook.ads.AudienceNetworkAds;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.ironsource.mediationsdk.IronSource;;
 
 public class MyApplicationClass extends Application {
 
@@ -42,6 +43,8 @@ public class MyApplicationClass extends Application {
         });
 
         context = getApplicationContext();
+
+        IronSource.setMetaData("Facebook_IS_CacheFlag","IMAGE");
 
         appOpenManager = new AppOpenManager(this);
 

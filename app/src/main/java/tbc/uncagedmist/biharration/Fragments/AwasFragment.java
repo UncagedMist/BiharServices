@@ -26,6 +26,9 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ironsource.mediationsdk.IronSource;
+import com.ironsource.mediationsdk.logger.IronSourceError;
+import com.ironsource.mediationsdk.sdk.InterstitialListener;
 
 import java.util.Locale;
 
@@ -38,7 +41,6 @@ public class AwasFragment extends Fragment {
 
     Button btnBene, btnAwas, btnSearch;
 
-    private InterstitialAd mInterstitialAd;
     Context context;
 
     FloatingActionButton fabBack;
@@ -53,8 +55,15 @@ public class AwasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        IronSource.init(
+                (Activity) context,
+                context.getString(R.string.IS_APP_KEY),
+                IronSource.AD_UNIT.INTERSTITIAL
+        );
+
         loadLocale();
         loadFullscreen();
+        IronSource.loadInterstitial();
 
         myFragment = inflater.inflate(R.layout.fragment_awas, container, false);
 
@@ -83,8 +92,9 @@ public class AwasFragment extends Fragment {
         btnBene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
 
@@ -102,8 +112,9 @@ public class AwasFragment extends Fragment {
         btnAwas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -120,8 +131,9 @@ public class AwasFragment extends Fragment {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -136,43 +148,6 @@ public class AwasFragment extends Fragment {
         });
     }
 
-    private void loadFullscreen() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-
-        InterstitialAd.load(
-                context,
-                context.getString(R.string.ADMOB_FULL),
-                adRequest,
-                new InterstitialAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                        mInterstitialAd = interstitialAd;
-
-                        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
-                            @Override
-                            public void onAdDismissedFullScreenContent() {
-                                Log.d("TAG", "The ad was dismissed.");
-                            }
-
-                            @Override
-                            public void onAdFailedToShowFullScreenContent(AdError adError) {
-                                Log.d("TAG", "The ad failed to show.");
-                            }
-
-                            @Override
-                            public void onAdShowedFullScreenContent() {
-                                mInterstitialAd = null;
-                                Log.d("TAG", "The ad was shown.");
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        mInterstitialAd = null;
-                    }
-                });
-    }
 
     private void loadLocale()   {
         SharedPreferences prefs = context.getSharedPreferences("Settings", MODE_PRIVATE);
@@ -192,5 +167,67 @@ public class AwasFragment extends Fragment {
         SharedPreferences.Editor editor = context.getSharedPreferences("Settings",MODE_PRIVATE).edit();
         editor.putString("My_Lang",lang);
         editor.apply();
+    }
+
+    private void loadFullscreen() {
+        IronSource.setInterstitialListener(new InterstitialListener() {
+            /**
+             * Invoked when Interstitial Ad is ready to be shown after load function was called.
+             */
+            @Override
+            public void onInterstitialAdReady() {
+            }
+            /**
+             * invoked when there is no Interstitial Ad available after calling load function.
+             */
+            @Override
+            public void onInterstitialAdLoadFailed(IronSourceError error) {
+            }
+            /**
+             * Invoked when the Interstitial Ad Unit is opened
+             */
+            @Override
+            public void onInterstitialAdOpened() {
+            }
+            /*
+             * Invoked when the ad is closed and the user is about to return to the application.
+             */
+            @Override
+            public void onInterstitialAdClosed() {
+            }
+            /**
+             * Invoked when Interstitial ad failed to show.
+             * @param error - An object which represents the reason of showInterstitial failure.
+             */
+            @Override
+            public void onInterstitialAdShowFailed(IronSourceError error) {
+            }
+            /*
+             * Invoked when the end user clicked on the interstitial ad, for supported networks only.
+             */
+            @Override
+            public void onInterstitialAdClicked() {
+            }
+            /** Invoked right before the Interstitial screen is about to open.
+             *  NOTE - This event is available only for some of the networks.
+             *  You should NOT treat this event as an interstitial impression, but rather use InterstitialAdOpenedEvent
+             */
+            @Override
+            public void onInterstitialAdShowSucceeded() {
+            }
+        });
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IronSource.onResume((Activity) context);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        IronSource.onPause((Activity) context);
     }
 }

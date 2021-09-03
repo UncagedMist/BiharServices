@@ -28,6 +28,10 @@ import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ironsource.mediationsdk.IronSource;
+import com.ironsource.mediationsdk.logger.IronSourceError;
+import com.ironsource.mediationsdk.model.Placement;
+import com.ironsource.mediationsdk.sdk.RewardedVideoListener;
 
 import java.util.Locale;
 
@@ -42,7 +46,6 @@ public class VoterFragment extends Fragment {
 
     FloatingActionButton fabBack;
 
-    private RewardedAd mRewardedAd;
     Context context;
 
     @Override
@@ -89,12 +92,9 @@ public class VoterFragment extends Fragment {
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedAd != null) {
-                    mRewardedAd.show((Activity) context, new OnUserEarnedRewardListener() {
-                        @Override
-                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        }
-                    });
+                if (IronSource.isRewardedVideoAvailable())  {
+                    //show rewarded video
+                    IronSource.showRewardedVideo("DefaultRewardedVideo");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -111,12 +111,9 @@ public class VoterFragment extends Fragment {
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedAd != null) {
-                    mRewardedAd.show((Activity) context, new OnUserEarnedRewardListener() {
-                        @Override
-                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        }
-                    });
+                if (IronSource.isRewardedVideoAvailable())  {
+                    //show rewarded video
+                    IronSource.showRewardedVideo("DefaultRewardedVideo");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -133,12 +130,9 @@ public class VoterFragment extends Fragment {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedAd != null) {
-                    mRewardedAd.show((Activity) context, new OnUserEarnedRewardListener() {
-                        @Override
-                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        }
-                    });
+                if (IronSource.isRewardedVideoAvailable())  {
+                    //show rewarded video
+                    IronSource.showRewardedVideo("DefaultRewardedVideo");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -155,12 +149,9 @@ public class VoterFragment extends Fragment {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedAd != null) {
-                    mRewardedAd.show((Activity) context, new OnUserEarnedRewardListener() {
-                        @Override
-                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        }
-                    });
+                if (IronSource.isRewardedVideoAvailable())  {
+                    //show rewarded video
+                    IronSource.showRewardedVideo("DefaultRewardedVideo");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -177,12 +168,9 @@ public class VoterFragment extends Fragment {
         btnTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedAd != null) {
-                    mRewardedAd.show((Activity) context, new OnUserEarnedRewardListener() {
-                        @Override
-                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        }
-                    });
+                if (IronSource.isRewardedVideoAvailable())  {
+                    //show rewarded video
+                    IronSource.showRewardedVideo("DefaultRewardedVideo");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -199,12 +187,9 @@ public class VoterFragment extends Fragment {
         btnReprint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedAd != null) {
-                    mRewardedAd.show((Activity) context, new OnUserEarnedRewardListener() {
-                        @Override
-                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        }
-                    });
+                if (IronSource.isRewardedVideoAvailable())  {
+                    //show rewarded video
+                    IronSource.showRewardedVideo("DefaultRewardedVideo");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -221,12 +206,9 @@ public class VoterFragment extends Fragment {
         btnServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedAd != null) {
-                    mRewardedAd.show((Activity) context, new OnUserEarnedRewardListener() {
-                        @Override
-                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        }
-                    });
+                if (IronSource.isRewardedVideoAvailable())  {
+                    //show rewarded video
+                    IronSource.showRewardedVideo("DefaultRewardedVideo");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -262,47 +244,56 @@ public class VoterFragment extends Fragment {
     }
 
     private void loadRewarded() {
-        AdRequest adRequest = new AdRequest.Builder().build();
+        IronSource.setRewardedVideoListener(new RewardedVideoListener() {
 
-        RewardedAd.load(
-                context,
-                context.getString(R.string.ADMOB_REWARDED),
-                adRequest,
-                new RewardedAdLoadCallback() {
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        // Handle the error.
-                        Log.d("TAG", loadAdError.getMessage());
-                        mRewardedAd = null;
-                    }
+            @Override
+            public void onRewardedVideoAdOpened() {
+            }
 
-                    @Override
-                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
-                        mRewardedAd = rewardedAd;
-                        Log.d("TAG", "Ad was loaded.");
+            @Override
+            public void onRewardedVideoAdClosed() {
+            }
 
-                        mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                            @Override
-                            public void onAdShowedFullScreenContent() {
-                                // Called when ad is shown.
-                                Log.d("TAG", "Ad was shown.");
-                            }
+            @Override
+            public void onRewardedVideoAvailabilityChanged(boolean available) {
+                //Change the in-app 'Traffic Driver' state according to availability.
+            }
 
-                            @Override
-                            public void onAdFailedToShowFullScreenContent(AdError adError) {
-                                // Called when ad fails to show.
-                                Log.d("TAG", "Ad failed to show.");
-                            }
+            @Override
+            public void onRewardedVideoAdRewarded(Placement placement) {
+                /** here you can reward the user according to the given amount.
+                 String rewardName = placement.getRewardName();
+                 int rewardAmount = placement.getRewardAmount();
+                 */
+            }
 
-                            @Override
-                            public void onAdDismissedFullScreenContent() {
-                                // Called when ad is dismissed.
-                                // Set the ad reference to null so you don't show the ad a second time.
-                                Log.d("TAG", "Ad was dismissed.");
-                                mRewardedAd = null;
-                            }
-                        });
-                    }
-                });
+            @Override
+            public void onRewardedVideoAdShowFailed(IronSourceError error) {
+            }
+
+            @Override
+            public void onRewardedVideoAdClicked(Placement placement){
+            }
+
+            @Override
+            public void onRewardedVideoAdStarted(){
+            }
+
+            @Override
+            public void onRewardedVideoAdEnded(){
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IronSource.onResume((Activity) context);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        IronSource.onPause((Activity) context);
     }
 }

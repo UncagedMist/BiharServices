@@ -31,6 +31,9 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ironsource.mediationsdk.IronSource;
+import com.ironsource.mediationsdk.logger.IronSourceError;
+import com.ironsource.mediationsdk.sdk.InterstitialListener;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -54,7 +57,6 @@ public class RationFragment extends Fragment {
 
     Button btnFormA,btnFormB,btnCheckStatus,btnRationAllot,btnDealer,btnHome,btnAadhaar,btnDownload,btnSearch;
 
-    private InterstitialAd mInterstitialAd;
     Context context;
 
     FloatingActionButton fabBack;
@@ -68,8 +70,15 @@ public class RationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        IronSource.init(
+                (Activity) context,
+                context.getString(R.string.IS_APP_KEY),
+                IronSource.AD_UNIT.INTERSTITIAL
+        );
+
         loadLocale();
         loadFullscreen();
+        IronSource.loadInterstitial();
 
         // Inflate the layout for this fragment
         myFragment = inflater.inflate(R.layout.fragment_ration, container, false);
@@ -85,6 +94,7 @@ public class RationFragment extends Fragment {
         btnAadhaar = myFragment.findViewById(R.id.btnAadhharLink);
         btnDownload = myFragment.findViewById(R.id.btnDownload);
         btnSearch = myFragment.findViewById(R.id.btnSearch);
+        fabBack = myFragment.findViewById(R.id.fabBack);
 
         onclickImplement();
 
@@ -92,11 +102,22 @@ public class RationFragment extends Fragment {
     }
 
     private void onclickImplement() {
+        fabBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeFragment homeFragment = new HomeFragment();
+                FragmentTransaction transaction = ((AppCompatActivity)context)
+                        .getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.main_frame,homeFragment).commit();
+            }
+        });
+
         btnFormA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     askForPermission();
@@ -108,8 +129,9 @@ public class RationFragment extends Fragment {
         btnFormB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     askForPermission();
@@ -121,8 +143,9 @@ public class RationFragment extends Fragment {
         btnCheckStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -139,8 +162,9 @@ public class RationFragment extends Fragment {
         btnRationAllot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -157,8 +181,9 @@ public class RationFragment extends Fragment {
         btnDealer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -175,8 +200,9 @@ public class RationFragment extends Fragment {
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -193,8 +219,9 @@ public class RationFragment extends Fragment {
         btnAadhaar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -211,8 +238,9 @@ public class RationFragment extends Fragment {
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -229,8 +257,9 @@ public class RationFragment extends Fragment {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mInterstitialAd != null)    {
-                    mInterstitialAd.show((Activity) context);
+                if (IronSource.isInterstitialReady()) {
+                    //show the interstitial
+                    IronSource.showInterstitial("DefaultInterstitial");
                 }
                 else {
                     ResultFragment resultFragment = new ResultFragment();
@@ -342,40 +371,64 @@ public class RationFragment extends Fragment {
     }
 
     private void loadFullscreen() {
-        AdRequest adRequest = new AdRequest.Builder().build();
+        IronSource.setInterstitialListener(new InterstitialListener() {
+            /**
+             * Invoked when Interstitial Ad is ready to be shown after load function was called.
+             */
+            @Override
+            public void onInterstitialAdReady() {
+            }
+            /**
+             * invoked when there is no Interstitial Ad available after calling load function.
+             */
+            @Override
+            public void onInterstitialAdLoadFailed(IronSourceError error) {
+            }
+            /**
+             * Invoked when the Interstitial Ad Unit is opened
+             */
+            @Override
+            public void onInterstitialAdOpened() {
+            }
+            /*
+             * Invoked when the ad is closed and the user is about to return to the application.
+             */
+            @Override
+            public void onInterstitialAdClosed() {
+            }
+            /**
+             * Invoked when Interstitial ad failed to show.
+             * @param error - An object which represents the reason of showInterstitial failure.
+             */
+            @Override
+            public void onInterstitialAdShowFailed(IronSourceError error) {
+            }
+            /*
+             * Invoked when the end user clicked on the interstitial ad, for supported networks only.
+             */
+            @Override
+            public void onInterstitialAdClicked() {
+            }
+            /** Invoked right before the Interstitial screen is about to open.
+             *  NOTE - This event is available only for some of the networks.
+             *  You should NOT treat this event as an interstitial impression, but rather use InterstitialAdOpenedEvent
+             */
+            @Override
+            public void onInterstitialAdShowSucceeded() {
+            }
+        });
+    }
 
-        InterstitialAd.load(
-                context,
-                context.getString(R.string.ADMOB_FULL),
-                adRequest,
-                new InterstitialAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                        mInterstitialAd = interstitialAd;
 
-                        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
-                            @Override
-                            public void onAdDismissedFullScreenContent() {
-                                Log.d("TAG", "The ad was dismissed.");
-                            }
+    @Override
+    public void onResume() {
+        super.onResume();
+        IronSource.onResume((Activity) context);
+    }
 
-                            @Override
-                            public void onAdFailedToShowFullScreenContent(AdError adError) {
-                                Log.d("TAG", "The ad failed to show.");
-                            }
-
-                            @Override
-                            public void onAdShowedFullScreenContent() {
-                                mInterstitialAd = null;
-                                Log.d("TAG", "The ad was shown.");
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        mInterstitialAd = null;
-                    }
-                });
+    @Override
+    public void onPause() {
+        super.onPause();
+        IronSource.onPause((Activity) context);
     }
 }
